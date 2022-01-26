@@ -66,12 +66,12 @@ namespace Diodon
             Gdk.Device device = display.get_device_manager().get_client_pointer();
             device.get_state(rootwin, (double[])null, out modifier);
 
-            // only accepted when left mouse button and shift button
+            // only accepted when shift/ctrl/alt keys
             // are not pressed
-            if((modifier & Gdk.ModifierType.BUTTON1_MASK) == 0) {
-                if((modifier & Gdk.ModifierType.SHIFT_MASK) == 0) {
+            if((modifier & Gdk.ModifierType.SHIFT_MASK) == 0
+                && (modifier & Gdk.ModifierType.CONTROL_MASK) == 0
+                && (modifier & Gdk.ModifierType.MOD1_MASK) == 0) {
                     return true;
-                }
             }
 
             return false;

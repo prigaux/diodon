@@ -66,6 +66,8 @@ namespace Diodon
             Gdk.Device device = display.get_device_manager().get_client_pointer();
             device.get_state(rootwin, (double[])null, out modifier);
 
+            stderr.printf("check_button_state: modifier is %x btn1:%d shif:%d mod2:%d\n", modifier, modifier & Gdk.ModifierType.BUTTON1_MASK, modifier & Gdk.ModifierType.SHIFT_MASK, modifier & Gdk.ModifierType.MOD2_MASK);
+            
             // only accepted when shift/ctrl/alt keys
             // are not pressed
             if((modifier & Gdk.ModifierType.SHIFT_MASK) == 0
@@ -85,13 +87,16 @@ namespace Diodon
         {
             // checking for text
             string? text = request_text();
+            stderr.printf("GOT TEXT: '''%s'''\n", text);
             if(text != null && text != "") {
                 if(check_button_state()) {
                     string? origin = Utility.get_path_of_active_application();
+                    stderr.printf("origin: '''%s'''\n", origin);
                     if (origin != null && (origin.has_suffix("/xterm") || origin.has_suffix("/code"))) {
                         // NB: for VSCode, use https://marketplace.visualstudio.com/items?itemName=dinhani.copy-on-select
-                        //stderr.printf("from xterm/vscode, ignoring...\n");
+                        stderr.printf("from xterm/vscode, ignoring...\n");
                     } else {
+                        stderr.printf("ACCEPTING!: %s '''%s'''\n", origin, text);
                         on_text_received(type, text, origin);
                     }
                 }

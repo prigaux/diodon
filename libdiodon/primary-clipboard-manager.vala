@@ -88,7 +88,12 @@ namespace Diodon
             if(text != null && text != "") {
                 if(check_button_state()) {
                     string? origin = Utility.get_path_of_active_application();
-                    on_text_received(type, text, origin);
+                    if (origin != null && (origin.has_suffix("/xterm") || origin.has_suffix("/code"))) {
+                        // NB: for VSCode, use https://marketplace.visualstudio.com/items?itemName=dinhani.copy-on-select
+                        //stderr.printf("from xterm/vscode, ignoring...\n");
+                    } else {
+                        on_text_received(type, text, origin);
+                    }
                 }
             }
             // checking if clipboard might be empty
